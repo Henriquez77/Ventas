@@ -7,6 +7,11 @@
     <?php
     $check_empresa = $insLogin->seleccionarDatos("Normal", "empresa LIMIT 1", "*", 0);
 
+    $total = isset($_SESSION['venta_total']) ? $_SESSION['venta_total'] : 0; // ya incluye IVA
+    $subtotal = $total / 1.13;
+    $iva = $total - $subtotal;
+
+
     if ($check_empresa->rowCount() == 1) {
         $check_empresa = $check_empresa->fetch();
     ?>
@@ -138,11 +143,7 @@
                                     $_SESSION['venta_total'] += $productos['venta_detalle_total'];
                                 }
                                 ?>
-                                <?php
-                                $total = $_SESSION['venta_total']; // ya incluye IVA
-                                $subtotal = $total / 1.13;
-                                $iva = $total - $subtotal;
-                                ?>
+
 
                                 <tr class="has-text-centered">
                                     <td colspan="5"></td>
@@ -244,7 +245,8 @@
                                     "cliente_tipo_documento" => $datos_cliente['cliente_tipo_documento'],
                                     "cliente_numero_documento" => $datos_cliente['cliente_numero_documento'],
                                     "cliente_nombre" => $datos_cliente['cliente_nombre'],
-                                    "cliente_apellido" => $datos_cliente['cliente_apellido']
+                                    "cliente_apellido" => $datos_cliente['cliente_apellido'],
+                                    "cliente_email" => $campos['cliente_email'] // 👈 IMPORTANTE
                                 ];
                             } else {
                                 $_SESSION['datos_cliente_venta'] = [

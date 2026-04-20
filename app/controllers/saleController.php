@@ -4,8 +4,54 @@ namespace app\controllers;
 
 use app\models\mainModel;
 
+
+/* PHPMailer */
+
+require_once __DIR__ . '/../../app/libraries/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../../app/libraries/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../../app/libraries/PHPMailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class saleController extends mainModel
 {
+	private function enviarFacturaCorreo($correo, $nombre, $codigoVenta)
+	{
+		$mail = new PHPMailer(true);
+
+		try {
+			// CONFIG SMTP (Gmail por ejemplo)
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'hwsolutionssm@gmail.com';
+			$mail->Password = 'qevhtzedmbshvyka';
+			$mail->SMTPSecure = 'ssl';
+			$mail->Port = 465;
+
+			// Remitente
+			$mail->setFrom('hwsolutionssm@gmail.com', 'Sistema de Ventas');
+
+			// Destinatario
+			$mail->addAddress($correo, $nombre);
+
+			// Contenido
+			$mail->isHTML(true);
+			$mail->Subject = 'Factura de compra';
+
+			$mail->Body = "
+            <h3>Gracias por su compra</h3>
+            <p>Su código de factura es: <b>$codigoVenta</b></p>
+            <p>Puede usar este código para consultar su factura.</p>
+        ";
+
+			$mail->send();
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 
 	/*---------- Controlador buscar codigo de producto ----------*/
 	public function buscarCodigoVentaControlador()
@@ -430,7 +476,8 @@ class saleController extends mainModel
 				"cliente_tipo_documento" => $campos['cliente_tipo_documento'],
 				"cliente_numero_documento" => $campos['cliente_numero_documento'],
 				"cliente_nombre" => $campos['cliente_nombre'],
-				"cliente_apellido" => $campos['cliente_apellido']
+				"cliente_apellido" => $campos['cliente_apellido'],
+				"cliente_email" => $campos['cliente_email'] // 👈 IMPORTANTE
 			];
 
 			$alerta = [
@@ -899,12 +946,27 @@ class saleController extends mainModel
 			exit();
 		}
 
+		$_SESSION['venta_codigo_factura'] = $codigo_venta;
+
+		$correo_cliente = $_SESSION['datos_cliente_venta']['cliente_email'];
+		$nombre_cliente = $_SESSION['datos_cliente_venta']['cliente_nombre'];
+
+
 		/*== Vaciando variables de sesion ==*/
 		unset($_SESSION['venta_total']);
 		unset($_SESSION['datos_cliente_venta']);
 		unset($_SESSION['datos_producto_venta']);
 
-		$_SESSION['venta_codigo_factura'] = $codigo_venta;
+		
+
+		// Validar que tenga correo
+		if ($_SESSION['datos_cliente_venta']['cliente_id'] != 1 && !empty($correo_cliente)) {
+			try {
+				//$this->enviarFacturaCorreo($correo_cliente, $nombre_cliente, $codigo_venta);
+			} catch (Exception $e) {
+				error_log("Error al enviar correo: " . $e->getMessage());
+			}
+		}
 
 		$alerta = [
 			"tipo" => "recargar",
