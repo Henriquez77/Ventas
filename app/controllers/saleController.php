@@ -555,14 +555,26 @@ class saleController extends mainModel
 
 		/*== Formateando variables ==*/
 		$venta_pagado = number_format($venta_pagado, MONEDA_DECIMALES, '.', '');
-		$venta_total = number_format($_SESSION['venta_total'], MONEDA_DECIMALES, '.', '');
+
 
 		$venta_fecha = date("Y-m-d");
 		$venta_hora = date("h:i a");
 
-		$venta_total_final = $venta_total;
-		$venta_total_final = number_format($venta_total_final, MONEDA_DECIMALES, '.', '');
 
+		/*== Total ya incluye IVA ==*/
+		$venta_total = floatval($_SESSION['venta_total']);
+
+		/*== Desglose ==*/
+		$venta_subtotal = $venta_total / 1.13;
+		$venta_iva = $venta_total - $venta_subtotal;
+
+		/*== Total final (NO cambia) ==*/
+		$venta_total_final = $venta_total;
+
+		/*== Formateando ==*/
+		$venta_subtotal = number_format($venta_subtotal, MONEDA_DECIMALES, '.', '');
+		$venta_iva = number_format($venta_iva, MONEDA_DECIMALES, '.', '');
+		$venta_total_final = number_format($venta_total_final, MONEDA_DECIMALES, '.', '');
 
 		/*== Calculando el cambio ==*/
 		if ($venta_pagado < $venta_total_final) {

@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </form>
-                <?php                
+                <?php
                 if (isset($_SESSION['alerta_producto_agregado']) && $_SESSION['alerta_producto_agregado'] != "") {
                     echo '
                     <div class="notification is-success is-light">
@@ -138,13 +138,35 @@
                                     $_SESSION['venta_total'] += $productos['venta_detalle_total'];
                                 }
                                 ?>
+                                <?php
+                                $total = $_SESSION['venta_total']; // ya incluye IVA
+                                $subtotal = $total / 1.13;
+                                $iva = $total - $subtotal;
+                                ?>
+
                                 <tr class="has-text-centered">
                                     <td colspan="5"></td>
+                                    <td class="has-text-weight-bold">SUBTOTAL</td>
                                     <td class="has-text-weight-bold">
-                                        TOTAL
+                                        <?php echo MONEDA_SIMBOLO . number_format($subtotal, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR); ?>
                                     </td>
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <tr class="has-text-centered">
+                                    <td colspan="5"></td>
+                                    <td class="has-text-weight-bold">IVA (13%)</td>
                                     <td class="has-text-weight-bold">
-                                        <?php echo MONEDA_SIMBOLO . number_format($_SESSION['venta_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
+                                        <?php echo MONEDA_SIMBOLO . number_format($iva, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR); ?>
+                                    </td>
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <tr class="has-text-centered">
+                                    <td colspan="5"></td>
+                                    <td class="has-text-weight-bold">TOTAL</td>
+                                    <td class="has-text-weight-bold">
+                                        <?php echo MONEDA_SIMBOLO . number_format($total, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR); ?>
                                     </td>
                                     <td colspan="3"></td>
                                 </tr>
@@ -256,7 +278,12 @@
                             <input class="input" type="text" id="venta_cambio" value="0.00" readonly>
                         </div>
 
-                        <h4 class="subtitle is-5 has-text-centered has-text-weight-bold mb-5"><small>TOTAL A PAGAR: <?php echo MONEDA_SIMBOLO . number_format($_SESSION['venta_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?></small></h4>
+                        <h4 class="subtitle is-5 has-text-centered has-text-weight-bold mb-5">
+                            <small>
+                                TOTAL A PAGAR:
+                                <?php echo MONEDA_SIMBOLO . number_format($total, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
+                            </small>
+                        </h4>
 
                         <?php if ($_SESSION['venta_total'] > 0) { ?>
                             <p class="has-text-centered">
@@ -416,52 +443,52 @@
 
     /* Actualizar cantidad y envio de producto */
     function actualizar_cantidad_y_envio(cantidadId, envioId, codigo) {
-    let cantidad = document.querySelector(cantidadId).value;
-    let envio = document.querySelector(envioId).value;
+        let cantidad = document.querySelector(cantidadId).value;
+        let envio = document.querySelector(envioId).value;
 
-    cantidad = cantidad.trim();
-    envio = envio.trim();
-    codigo = codigo.trim();
+        cantidad = cantidad.trim();
+        envio = envio.trim();
+        codigo = codigo.trim();
 
-    if (cantidad > 0 && envio >= 0) {
+        if (cantidad > 0 && envio >= 0) {
 
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Desea actualizar la cantidad y el costo de envío del producto",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, actualizar',
-            cancelButtonText: 'No, cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Desea actualizar la cantidad y el costo de envío del producto",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, actualizar',
+                cancelButtonText: 'No, cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                let datos = new FormData();
-                datos.append("producto_codigo", codigo);
-                datos.append("producto_cantidad", cantidad);
-                datos.append("producto_envio", envio);
-                datos.append("modulo_venta", "actualizar_producto");
+                    let datos = new FormData();
+                    datos.append("producto_codigo", codigo);
+                    datos.append("producto_cantidad", cantidad);
+                    datos.append("producto_envio", envio);
+                    datos.append("modulo_venta", "actualizar_producto");
 
-                fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
-                        method: 'POST',
-                        body: datos
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(respuesta => {
-                        return alertas_ajax(respuesta);
-                    });
-            }
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Ocurrió un error inesperado',
-            text: 'Debes introducir una cantidad mayor a 0 y un costo de envío válido',
-            confirmButtonText: 'Aceptar'
-        });
+                    fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+                            method: 'POST',
+                            body: datos
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(respuesta => {
+                            return alertas_ajax(respuesta);
+                        });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error inesperado',
+                text: 'Debes introducir una cantidad mayor a 0 y un costo de envío válido',
+                confirmButtonText: 'Aceptar'
+            });
+        }
     }
-}
 
 
 

@@ -217,8 +217,36 @@ if ($datos_venta->rowCount() == 1) {
 	$pdf->Cell(100, 7, iconv("UTF-8", "ISO-8859-1", ''), 'T', 0, 'C');
 	$pdf->Cell(15, 7, iconv("UTF-8", "ISO-8859-1", ''), 'T', 0, 'C');
 
-	$pdf->Cell(32, 7, iconv("UTF-8", "ISO-8859-1", 'TOTAL A PAGAR'), 'T', 0, 'C');
-	$pdf->Cell(34, 7, iconv("UTF-8", "ISO-8859-1", MONEDA_SIMBOLO . number_format($datos_venta['venta_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . ' ' . MONEDA_NOMBRE), 'T', 0, 'C');
+	//$pdf->Cell(32, 7, iconv("UTF-8", "ISO-8859-1", 'TOTAL A PAGAR'), 'T', 0, 'C');
+	//$pdf->Cell(34, 7, iconv("UTF-8", "ISO-8859-1", MONEDA_SIMBOLO . number_format($datos_venta['venta_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . ' ' . MONEDA_NOMBRE), 'T', 0, 'C');
+
+
+	$total = $datos_venta['venta_total']; // ya incluye IVA
+	$subtotal = $total / 1.13;
+	$iva = $total - $subtotal;
+	
+	$pdf->Ln(5);
+
+	/* SUBTOTAL */
+	$pdf->Cell(115, 7, '', 0, 0, 'C');
+	$pdf->Cell(32, 7, 'SUBTOTAL', 0, 0, 'C');
+	$pdf->Cell(34, 7, MONEDA_SIMBOLO . number_format($subtotal, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR), 0, 0, 'C');
+
+	$pdf->Ln(7);
+
+	/* IVA */
+	$pdf->Cell(100, 7, '', 0, 0, 'C');
+	$pdf->Cell(15, 7, '', 0, 0, 'C');
+	$pdf->Cell(32, 7, 'IVA (13%)', 0, 0, 'C');
+	$pdf->Cell(34, 7, MONEDA_SIMBOLO . number_format($iva, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR), 0, 0, 'C');
+
+	$pdf->Ln(7);
+
+	/* TOTAL */
+	$pdf->Cell(100, 7, '', 0, 0, 'C');
+	$pdf->Cell(15, 7, '', 0, 0, 'C');
+	$pdf->Cell(32, 7, 'TOTAL A PAGAR', 0, 0, 'C');
+	$pdf->Cell(34, 7, MONEDA_SIMBOLO . number_format($total, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . ' ' . MONEDA_NOMBRE, 0, 0, 'C');
 
 	$pdf->Ln(7);
 
@@ -239,7 +267,7 @@ if ($datos_venta->rowCount() == 1) {
 	$pdf->SetFont('Arial', '', 9);
 
 	$pdf->SetTextColor(39, 39, 51);
-	$pdf->MultiCell(0, 9, iconv("UTF-8", "ISO-8859-1", "*** Precios de productos no incluyen IVA. Para poder realizar un reclamo o garantia debe de presentar esta factura ***"), 0, 'C', false);
+	$pdf->MultiCell(0, 9, iconv("UTF-8", "ISO-8859-1", "*** Para poder realizar un reclamo o garantia debe de presentar esta factura ***"), 0, 'C', false);
 	$pdf->MultiCell(0, 1, iconv("UTF-8", "ISO-8859-1", "*** No se aceptan devoluciones ***"), 0, 'C', false);
 
 	$pdf->Ln(9);
