@@ -398,3 +398,303 @@ body,html{
     border: none;
     cursor: pointer;
 }
+
+/*=====================================================
+                OPTIMIZACIÓN MÓVIL
+======================================================*/
+@media (max-width: 600px){
+
+    /* Tipografía general más pequeña */
+    body, html{
+        font-size: 14px;
+    }
+
+    h1{ font-size: 20px; }
+    h2{ font-size: 18px; }
+    h3{ font-size: 16px; }
+
+    /* Navbar más compacta */
+    .navBar{
+        height: 40px;
+    }
+
+    .navBar-options{
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .navBar-options .fa-exchange-alt{
+        font-size: 18px;
+        width: 35px;
+    }
+
+    .navBar-options-list ul li{
+        font-size: 16px;
+        padding: 0 5px;
+    }
+
+    .navBar-options-list ul li img{
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Menú lateral más compacto */
+    .navLateral{
+        width: 250px;
+    }
+
+    .navLateral-change{
+        width: 250px;
+    }
+
+    .navLateral-body-logo{
+        font-size: 18px;
+    }
+
+    .navLateral-body-tittle-menu{
+        font-size: 16px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .menu-principal li a{
+        height: 40px;
+    }
+
+    .menu-principal li a div.navLateral-body-cl,
+    .menu-principal li a div.navLateral-body-cr{
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+    }
+
+    /* Contenido principal */
+    .pageContent{
+        padding: 5px;
+    }
+
+    /* Cards más compactas */
+    .card-producto{
+        font-size: 14px;
+    }
+
+    .img-producto{
+        height: 150px;
+    }
+
+    .icono-accion i{
+        font-size: 16px;
+    }
+
+    /* Detalles de venta */
+    .sale-details{
+        flex-direction: column;
+        gap: 5px;
+        font-size: 13px;
+    }
+
+    /* Botones */
+    button, .button{
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    /* Inputs */
+    input, select{
+        font-size: 13px;
+        padding: 6px;
+    }
+}
+@media (max-width: 600px){
+
+    .page-container{
+        display: block; /* 🔥 evita problemas con flex */
+    }
+
+    .navLateral{
+        position: fixed;
+        left: -250px; /* oculto fuera de pantalla */
+        top: 0;
+        width: 250px;
+        height: 100%;
+        z-index: 1000;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .navLateral-change{
+        left: 0; /* aparece */
+    }
+
+    .pageContent{
+        width: 100% !important; /* 🔥 clave */
+        margin-left: 0 !important;
+    }
+
+}
+
+/* Eliminar bordes blancos globales */
+html, body{
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden; /* 🔥 evita scroll lateral */
+}
+
+/* Asegurar que todo use bien el ancho */
+*{
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.page-container{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Contenido principal */
+.pageContent{
+    padding: 0 !important; /* 🔥 si quieres puedes dejar 5px si prefieres */
+}
+
+/* Header del sidebar */
+.navLateral-header{
+    width: 100%;
+    height: 45px;
+    background-color: #3F51B5;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1001; /* 🔥 más alto que el contenido */
+}
+
+/* Botón cerrar */
+.btn-close-menu{
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Asegurar que el menú esté encima */
+.navLateral{
+    z-index: 1000;
+}
+@media (min-width: 601px){
+    .navLateral-header{
+        display: none;
+    }
+}
+@media (min-width: 601px){
+    #btn-menu{
+        display: inline-block !important;
+    }
+}
+
+.custom-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.custom-switch input { display: none; }
+
+.custom-slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #9e9e9e; /* OFF */
+  border-radius: 25px;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transition: .3s;
+}
+
+.custom-slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+.custom-switch input:checked + .custom-slider {
+  background-color: #485fc7; /* ON */
+}
+
+.custom-switch input:checked + .custom-slider:before {
+  transform: translateX(24px);
+}
+
+/* Contenedor padre para que no estorbe en el diseño del sistema */
+.contenedor-invisible {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    left: -2000px; 
+    top: 0;
+}
+
+#tarjeta-producto {
+    /* Medidas fijas para la captura */
+    width: 1000px; 
+    height: 1000px;
+    background-color: white;
+    
+    /* Centrado absoluto del contenido */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Espaciado de seguridad para que nada toque los bordes de la imagen */
+    padding: 60px; 
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Forzamos que la fila de Bulma ocupe el ancho sin márgenes manuales */
+.columns-container {
+    width: 100%;
+    margin: 0 !important;
+}
+
+/* Contenedor y ajuste de la imagen */
+.is-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.is-photo {
+    max-height: 500px; 
+    width: auto;
+    object-fit: contain;
+}
+
+/* Estilos de texto y control de saltos de línea */
+#tarjeta-producto .content p {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    /* Control de desbordamiento para que no se corte el texto */
+    overflow-wrap: anywhere; 
+    word-break: normal;
+}
+
+/* Ajuste específico para la columna de texto */
+#tarjeta-producto .column.is-7 {
+    /* Padding extra a la derecha para asegurar que el texto no se pegue al borde */
+    padding-right: 40px; 
+}
+
+/* Tipografía de títulos si los usas */
+#tarjeta-producto .subtitle {
+    font-size: 1.8rem !important;
+}
+

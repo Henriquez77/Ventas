@@ -16,3 +16,5 @@ function calcularCosto() {
 document.getElementById("stock").addEventListener("input", calcularCosto);
 document.getElementById("compra").addEventListener("input", calcularCosto);
 document.getElementById("envio").addEventListener("input", calcularCosto);
+
+    

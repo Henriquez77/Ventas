@@ -52,6 +52,14 @@
 			<div class="columns">
 				<div class="column">
 					<div class="control">
+						<label>Descripción</label>
+						<textarea class="textarea" name="producto_descripcion" maxlength="1000"><?php echo $datos['producto_descripcion']; ?></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="columns">
+				<div class="column">
+					<div class="control">
 						<label>Costo de compra <?php echo CAMPO_OBLIGATORIO; ?></label>
 						<input class="input" type="text" name="producto_costo_compra" value="<?php echo $datos['producto_costo_compra']; ?>" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required>
 					</div>
@@ -65,7 +73,7 @@
 				<div class="column">
 					<div class="control">
 						<label>Stock o existencias <?php echo CAMPO_OBLIGATORIO; ?></label>
-						<input class="input" type="text" name="producto_stock_total" value="<?php echo $datos['producto_stock_total']; ?>" pattern="[0-9]{1,22}" maxlength="22" required>
+						<input class="input" type="text"  id="stock" name="producto_stock_total" value="<?php echo $datos['producto_stock_total']; ?>" pattern="[0-9]{1,22}" maxlength="22" required>
 					</div>
 				</div>
 			</div>
@@ -73,13 +81,13 @@
 				<div class="column">
 					<div class="control">
 						<label>Costo del envío local <?php echo CAMPO_OBLIGATORIO; ?></label>
-						<input class="input" type="text" name="producto_costo_envio" value="<?php echo $datos['producto_costo_envio']; ?>" pattern="[0-9.]{1,25}" maxlength="25" required>
+						<input class="input" type="text" id="envio" name="producto_costo_envio" value="<?php echo $datos['producto_costo_envio']; ?>" pattern="[0-9.]{1,25}" maxlength="25" required>
 					</div>
 				</div>
 				<div class="column">
 					<div class="control">
 						<label>Costo C/U <?php echo CAMPO_OBLIGATORIO; ?></label>
-						<input class="input" type="text" name="producto_costo_unidad" value="<?php echo $datos['producto_costo_unidad']; ?>" pattern="[0-9.]{1,25}" maxlength="25" required>
+						<input class="input" type="number" step="0.01" id="costo_unitario" value="<?php echo $datos['producto_costo_unidad']; ?>" name="producto_costo_unidad" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required readonly>
 					</div>
 				</div>
 				<div class="column">
@@ -91,9 +99,11 @@
 
 			</div>
 			<div class="columns">
+
+				<!-- CATEGORÍA -->
 				<div class="column">
 					<label>Categoría <?php echo CAMPO_OBLIGATORIO; ?></label><br>
-					<div class="select">
+					<div class="select" style="gap:10px; margin-top:8px;">
 						<select name="producto_categoria">
 							<?php
 							$datos_categorias = $insLogin->seleccionarDatos("Normal", "categoria", "*", 0);
@@ -111,7 +121,24 @@
 						</select>
 					</div>
 				</div>
-				
+
+				<div class="column">
+					<label>Estado <?php echo CAMPO_OBLIGATORIO; ?></label><br>
+
+					<div class="is-flex is-align-items-center" style="gap:10px; margin-top:12px;">
+
+						<label class="custom-switch m-0">
+							<input type="checkbox" name="producto_estado" value="disponible"
+								<?php echo ($datos['producto_estado'] == "disponible") ? "checked" : ""; ?>>
+							<span class="custom-slider"></span>
+						</label>
+
+						<span>
+							<?php echo ($datos['producto_estado'] == "disponible") ? "Disponible" : "No disponible"; ?>
+						</span>
+
+					</div>
+				</div>
 			</div>
 			<p class="has-text-centered">
 				<button type="submit" class="button is-success is-rounded"><i class="fas fa-sync-alt"></i> &nbsp; Actualizar</button>

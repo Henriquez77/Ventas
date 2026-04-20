@@ -1,5 +1,11 @@
 <section class="full-width navLateral scroll" id="navLateral">
 	<div class="full-width navLateral-body">
+	    <!-- 🔥 BOTÓN CERRAR -->
+		<div class="navLateral-header">
+			<span class="btn-close-menu">
+				<i class="fas fa-exchange-alt fa-fw" id="btn-closemenu"></i> 
+			</span>
+		</div>
 		<div class="full-width navLateral-body-logo has-text-centered tittles is-uppercase">
 			Sistema de ventas
 		</div>

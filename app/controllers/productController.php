@@ -607,7 +607,9 @@ class productController extends mainModel
                         <a href="' . APP_URL . 'productUpdate/' . $rows['producto_id'] . '/" class="card-footer-item icono-accion">
                             <i class="fas fa-sync"></i>
                         </a>
-
+                        <a href="' . APP_URL . 'productInfo/' . $rows['producto_id'] . '/" class="card-footer-item icono-accion">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
                         <form class="FormularioAjax card-footer-item icono-accion" action="' . APP_URL . 'app/ajax/productoAjax.php" method="POST">
                             <input type="hidden" name="modulo_producto" value="eliminar">
                             <input type="hidden" name="producto_id" value="' . $rows['producto_id'] . '">
@@ -738,6 +740,8 @@ class productController extends mainModel
 		$stock = $this->limpiarCadena($_POST['producto_stock_total']); //
 		$fecha_ingresado = $this->limpiarCadena($_POST['producto_fecha_ingresado']);
 		$categoria = $this->limpiarCadena($_POST['producto_categoria']);
+		$descripcion = $this->limpiarCadena($_POST['producto_descripcion']);
+		$estado = isset($_POST['producto_estado']) ? "disponible" : "no_disponible";
 
 		# Verificando campos obligatorios #
 		if ($codigo == "" || $nombre == "" || $precio_compra == "" || $precio_venta == "" || $stock == "") {
@@ -795,7 +799,16 @@ class productController extends mainModel
 			return json_encode($alerta);
 			exit();
 		}
-
+        if(strlen($descripcion) > 1000){
+        	$alerta = [
+        		"tipo" => "simple",
+        		"titulo" => "Ocurrió un error inesperado",
+        		"texto" => "La DESCRIPCIÓN no puede tener más de 1000 caracteres",
+        		"icono" => "error"
+        	];
+        	return json_encode($alerta);
+        	exit();
+        }
 		if ($this->verificarDatos("[0-9]{1,22}", $stock)) {
 			$alerta = [
 				"tipo" => "simple",
@@ -942,6 +955,16 @@ class productController extends mainModel
 				"campo_nombre" => "producto_costo_compra",
 				"campo_marcador" => ":PrecioCompra",
 				"campo_valor" => $precio_compra
+			],
+			[
+				"campo_nombre" => "producto_descripcion",
+				"campo_marcador" => ":Descripcion",
+				"campo_valor" => $descripcion
+			],
+			[
+				"campo_nombre" => "producto_estado",
+				"campo_marcador" => ":Estado",
+				"campo_valor" => $estado
 			],
 			[
 				"campo_nombre" => "producto_costo_envio",

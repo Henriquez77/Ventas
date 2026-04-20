@@ -24,11 +24,30 @@
 				</div>
 		  	</div>
 		  	<div class="column">
-		    	<div class="control">
-					<label>Numero de documento <?php echo CAMPO_OBLIGATORIO; ?></label>
-				  	<input class="input" type="text" name="cliente_numero_documento" pattern="[a-zA-Z0-9-]{7,30}" maxlength="30" required >
+				<div class="control" style="display: flex; flex-wrap: wrap; align-items: center;">
+					<label style="flex: 1 1 100%;">Número de documento <?php echo CAMPO_OBLIGATORIO; ?></label>
+					<input
+						id="numero-doc"
+						class="input"
+						type="text"
+						name="cliente_numero_documento"
+						pattern="[0-9]{10}"
+						maxlength="10"
+						required
+						style="flex: 1;"
+						oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+					<button type="button" class="button" style="margin-left: 10px;" onclick="generarNumero()">Generar</button>
 				</div>
-		  	</div>
+			</div>
+			<script>
+				function generarNumero() {
+					let numero = '';
+					for (let i = 0; i < 10; i++) {
+						numero += Math.floor(Math.random() * 10); // solo números
+					}
+					document.getElementById('numero-doc').value = numero;
+				}
+			</script>
 		</div>
 		<div class="columns">
 		  	<div class="column">
