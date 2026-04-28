@@ -291,6 +291,52 @@
 							<i class="fas fa-shopping-cart fa-fw"></i>
 						</div>
 						<div class="navLateral-body-cr">
+							COTIZACIONES
+						</div>
+						<span class="fas fa-chevron-down"></span>
+					</a>
+					<ul class="full-width menu-principal sub-menu-options">
+						<li class="full-width">
+							<a href="<?php echo APP_URL; ?>quotationNew/" class="full-width">
+								<div class="navLateral-body-cl">
+									<i class="fas fa-cart-plus fa-fw"></i>
+								</div>
+								<div class="navLateral-body-cr">
+									Nueva cotizacion
+								</div>
+							</a>
+						</li>
+						<li class="full-width">
+							<a href="<?php echo APP_URL; ?>quotationList/" class="full-width">
+								<div class="navLateral-body-cl">
+									<i class="fas fa-clipboard-list fa-fw"></i>
+								</div>
+								<div class="navLateral-body-cr">
+									Lista de cotizaciones
+								</div>
+							</a>
+						</li>
+						<li class="full-width">
+							<a href="" class="full-width">
+								<div class="navLateral-body-cl">
+									<i class="fas fa-search-dollar fa-fw"></i>
+								</div>
+								<div class="navLateral-body-cr">
+									Buscar cotizaciones
+								</div>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="full-width divider-menu-h"></li>
+
+				<li class="full-width">
+					<a href="#" class="full-width btn-subMenu">
+						<div class="navLateral-body-cl">
+							<i class="fas fa-shopping-cart fa-fw"></i>
+						</div>
+						<div class="navLateral-body-cr">
 							VENTAS
 						</div>
 						<span class="fas fa-chevron-down"></span>

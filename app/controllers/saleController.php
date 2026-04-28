@@ -5,53 +5,8 @@ namespace app\controllers;
 use app\models\mainModel;
 
 
-/* PHPMailer */
-
-require_once __DIR__ . '/../../app/libraries/PHPMailer/src/Exception.php';
-require_once __DIR__ . '/../../app/libraries/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/../../app/libraries/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 class saleController extends mainModel
 {
-	private function enviarFacturaCorreo($correo, $nombre, $codigoVenta)
-	{
-		$mail = new PHPMailer(true);
-
-		try {
-			// CONFIG SMTP (Gmail por ejemplo)
-			$mail->isSMTP();
-			$mail->Host = 'smtp.gmail.com';
-			$mail->SMTPAuth = true;
-			$mail->Username = 'hwsolutionssm@gmail.com';
-			$mail->Password = 'qevhtzedmbshvyka';
-			$mail->SMTPSecure = 'ssl';
-			$mail->Port = 465;
-
-			// Remitente
-			$mail->setFrom('hwsolutionssm@gmail.com', 'Sistema de Ventas');
-
-			// Destinatario
-			$mail->addAddress($correo, $nombre);
-
-			// Contenido
-			$mail->isHTML(true);
-			$mail->Subject = 'Factura de compra';
-
-			$mail->Body = "
-            <h3>Gracias por su compra</h3>
-            <p>Su código de factura es: <b>$codigoVenta</b></p>
-            <p>Puede usar este código para consultar su factura.</p>
-        ";
-
-			$mail->send();
-			return true;
-		} catch (Exception $e) {
-			return false;
-		}
-	}
 
 	/*---------- Controlador buscar codigo de producto ----------*/
 	public function buscarCodigoVentaControlador()

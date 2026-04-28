@@ -1,6 +1,6 @@
 <div class="container is-fluid mb-6">
-    <h1 class="title">Ventas</h1>
-    <h2 class="subtitle"><i class="fas fa-cart-plus fa-fw"></i> &nbsp; Nueva venta</h2>
+    <h1 class="title">Cotización</h1>
+    <h2 class="subtitle"><i class="fas fa-file-alt fa-fw"></i> &nbsp; Nueva cotización</h2>
 </div>
 
 <div class="container pb-2 pr-5 pl-5">
@@ -8,6 +8,9 @@
     $check_empresa = $insLogin->seleccionarDatos("Normal", "empresa LIMIT 1", "*", 0);
 
     $total = 0;
+    if (!isset($_SESSION['cotizacion_total'])) {
+        $_SESSION['cotizacion_total'] = 0;
+    }
 
 
     if ($check_empresa->rowCount() == 1) {
@@ -49,22 +52,22 @@
                     unset($_SESSION['alerta_producto_agregado']);
                 }
 
-                if (isset($_SESSION['venta_codigo_factura']) && $_SESSION['venta_codigo_factura'] != "") {
+                if (isset($_SESSION['cotizacion_codigo']) && $_SESSION['cotizacion_codigo'] != "") {
                 ?>
                     <div class="notification is-info is-light mb-2 mt-2">
-                        <h4 class="has-text-centered has-text-weight-bold">Venta realizada</h4>
-                        <p class="has-text-centered mb-2">La venta se realizó con éxito. ¿Que desea hacer a continuación? </p>
+                        <h4 class="has-text-centered has-text-weight-bold">Cotización generada</h4>
+                        <p class="has-text-centered mb-2">La cotización se realizó con éxito...</p>
                         <br>
                         <div class="container">
                             <div class="columns">
                                 <div class="column has-text-centered">
-                                    <button type="button" class="button is-link is-light" onclick="print_ticket('<?php echo APP_URL . "app/pdf/ticket.php?code=" . $_SESSION['venta_codigo_factura']; ?>')">
+                                    <button type="button" class="button is-link is-light" onclick="print_ticket('<?php echo APP_URL . "app/pdf/ticket.php?code=" . $_SESSION['cotizacion_codigo']; ?>')">
                                         <i class="fas fa-receipt fa-2x"></i> &nbsp;
                                         Imprimir ticket de venta
                                     </button>
                                 </div>
                                 <div class="column has-text-centered">
-                                    <button type="button" class="button is-link is-light" onclick="print_invoice('<?php echo APP_URL . "app/pdf/invoice.php?code=" . $_SESSION['venta_codigo_factura']; ?>')">
+                                    <button type="button" class="button is-link is-light" onclick="print_invoice('<?php echo APP_URL . "app/pdf/invoice.php?code=" . $_SESSION['cotizacion_codigo']; ?>')">
                                         <i class="fas fa-file-invoice-dollar fa-2x"></i> &nbsp;
                                         Imprimir factura de venta
                                     </button>
@@ -73,7 +76,7 @@
                         </div>
                     </div>
                 <?php
-                    unset($_SESSION['venta_codigo_factura']);
+                    unset($_SESSION['cotizacion_codigo']);
                 }
                 ?>
                 <div class="table-container">
@@ -93,32 +96,32 @@
                         </thead>
                         <tbody>
                             <?php
-                            if (isset($_SESSION['datos_producto_venta']) && count($_SESSION['datos_producto_venta']) >= 1) {
+                            if (isset($_SESSION['datos_producto_cotizacion']) && count($_SESSION['datos_producto_cotizacion']) >= 1) {
 
-                                $_SESSION['venta_total'] = 0;
+                                $_SESSION['cotizacion_total'] = 0;
                                 $cc = 1;
 
-                                foreach ($_SESSION['datos_producto_venta'] as $productos) {
+                                foreach ($_SESSION['datos_producto_cotizacion'] as $productos) {
                             ?>
                                     <tr class="has-text-centered">
                                         <td><?php echo $cc; ?></td>
                                         <td><?php echo $productos['producto_codigo']; ?></td>
-                                        <td><?php echo $productos['venta_detalle_descripcion']; ?></td>
+                                        <td><?php echo $productos['cotizacion_detalle_descripcion']; ?></td>
                                         <td>
                                             <div class="control">
-                                                <input class="input sale_input-cant has-text-centered" value="<?php echo $productos['venta_detalle_cantidad']; ?>" id="sale_input_<?php echo str_replace(" ", "_", $productos['producto_codigo']); ?>" type="text" style="max-width: 80px;">
+                                                <input class="input sale_input-cant has-text-centered" value="<?php echo $productos['cotizacion_detalle_cantidad']; ?>" id="sale_input_<?php echo str_replace(" ", "_", $productos['producto_codigo']); ?>" type="text" style="max-width: 80px;">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="control">
-                                                <input class="input sale_input-envio has-text-centered" value="<?php echo $productos['venta_envio_costo']; ?>" id="envio_input_<?php echo str_replace(" ", "_", $productos['producto_codigo']); ?>" pattern="[0-9.]{1,25}" maxlength="25" type="text" style="max-width: 80px;">
+                                                <input class="input sale_input-envio has-text-centered" value="<?php echo $productos['cotizacion_envio_costo']; ?>" id="envio_input_<?php echo str_replace(" ", "_", $productos['producto_codigo']); ?>" pattern="[0-9.]{1,25}" maxlength="25" type="text" style="max-width: 80px;">
                                             </div>
                                         </td>
                                         <td>
-                                            <?php echo MONEDA_SIMBOLO . number_format($productos['venta_detalle_precio_venta'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
+                                            <?php echo MONEDA_SIMBOLO . number_format($productos['cotizacion_detalle_precio_venta'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
                                         </td>
                                         <td>
-                                            <?php echo MONEDA_SIMBOLO . number_format($productos['venta_detalle_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
+                                            <?php echo MONEDA_SIMBOLO . number_format($productos['cotizacion_detalle_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
                                         </td>
                                         <td>
                                             <button type="button" class="button is-success is-rounded is-small"
@@ -127,9 +130,9 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/ventaAjax.php" method="POST" autocomplete="off">
+                                            <form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php" method="POST" autocomplete="off">
                                                 <input type="hidden" name="producto_codigo" value="<?php echo $productos['producto_codigo']; ?>">
-                                                <input type="hidden" name="modulo_venta" value="remover_producto">
+                                                <input type="hidden" name="modulo_cotizacion" value="remover_producto">
                                                 <button type="submit" class="button is-danger is-rounded is-small" title="Remover producto">
                                                     <i class="fas fa-trash-restore fa-fw"></i>
                                                 </button>
@@ -138,9 +141,9 @@
                                     </tr>
                                 <?php
                                     $cc++;
-                                    $_SESSION['venta_total'] += $productos['venta_detalle_total'];
+                                    $_SESSION['cotizacion_total'] += $productos['cotizacion_detalle_total'];
                                 }
-                                $total = isset($_SESSION['venta_total']) ? $_SESSION['venta_total'] : 0; // ya incluye IVA
+                                $total = isset($_SESSION['cotizacion_total']) ? $_SESSION['cotizacion_total'] : 0; // ya incluye IVA
                                 $subtotal = $total / 1.13;
                                 $iva = $total - $subtotal;
                                 ?>
@@ -174,7 +177,7 @@
                                 </tr>
                             <?php
                             } else {
-                                $_SESSION['venta_total'] = 0;
+                                $_SESSION['cotizacion_total'] = 0;
                             ?>
                                 <tr class="has-text-centered">
                                     <td colspan="8">
@@ -188,12 +191,12 @@
 
             </div>
             <div class="column is-one-quarter">
-                <h2 class="title has-text-centered">Datos de la venta</h2>
+                <h2 class="title has-text-centered">Datos de la cotizacion</h2>
                 <hr>
 
-                <?php if ($_SESSION['venta_total'] > 0) { ?>
-                    <form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/ventaAjax.php" method="POST" autocomplete="off" name="formsale">
-                        <input type="hidden" name="modulo_venta" value="registrar_venta">
+                <?php if ($_SESSION['cotizacion_total'] > 0) { ?>
+                    <form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php" method="POST" autocomplete="off" name="formsale">
+                        <input type="hidden" name="modulo_cotizacion" value="registrar_cotizacion">
                     <?php } else { ?>
                         <form name="formsale">
                         <?php } ?>
@@ -203,34 +206,17 @@
                             <input class="input" type="date" value="<?php echo date("Y-m-d"); ?>">
                         </div>
 
-                        <label>Caja de ventas <?php echo CAMPO_OBLIGATORIO; ?></label><br>
-                        <div class="select mb-5">
-                            <select name="venta_caja">
-                                <?php
-                                $datos_cajas = $insLogin->seleccionarDatos("Normal", "caja", "*", 0);
-
-                                while ($campos_caja = $datos_cajas->fetch()) {
-                                    if ($campos_caja['caja_id'] == $_SESSION['caja']) {
-                                        echo '<option value="' . $campos_caja['caja_id'] . '" selected="" >Caja No.' . $campos_caja['caja_numero'] . ' - ' . $campos_caja['caja_nombre'] . ' (Actual)</option>';
-                                    } else {
-                                        echo '<option value="' . $campos_caja['caja_id'] . '">Caja No.' . $campos_caja['caja_numero'] . ' - ' . $campos_caja['caja_nombre'] . '</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <br>
 
                         <label>Cliente</label>
                         <?php
-                        if (isset($_SESSION['datos_cliente_venta']) && count($_SESSION['datos_cliente_venta']) >= 1 && $_SESSION['datos_cliente_venta']['cliente_id'] != 1) {
+                        if (isset($_SESSION['datos_cliente_cotizacion']) && count($_SESSION['datos_cliente_cotizacion']) >= 1 && $_SESSION['datos_cliente_cotizacion']['cliente_id'] != 1) {
                         ?>
                             <div class="field has-addons mb-5">
                                 <div class="control">
-                                    <input class="input" type="text" readonly id="venta_cliente" value="<?php echo $_SESSION['datos_cliente_venta']['cliente_nombre'] . " " . $_SESSION['datos_cliente_venta']['cliente_apellido']; ?>">
+                                    <input class="input" type="text" readonly id="venta_cliente" value="<?php echo $_SESSION['datos_cliente_cotizacion']['cliente_nombre'] . " " . $_SESSION['datos_cliente_cotizacion']['cliente_apellido']; ?>">
                                 </div>
                                 <div class="control">
-                                    <a class="button is-danger" title="Remove cliente" id="btn_remove_client" onclick="remover_cliente(<?php echo $_SESSION['datos_cliente_venta']['cliente_id']; ?>)">
+                                    <a class="button is-danger" title="Remove cliente" id="btn_remove_client" onclick="remover_cliente(<?php echo $_SESSION['datos_cliente_cotizacion']['cliente_id']; ?>)">
                                         <i class="fas fa-user-times fa-fw"></i>
                                     </a>
                                 </div>
@@ -241,7 +227,7 @@
                             if ($datos_cliente->rowCount() == 1) {
                                 $datos_cliente = $datos_cliente->fetch();
 
-                                $_SESSION['datos_cliente_venta'] = [
+                                $_SESSION['datos_cliente_cotizacion'] = [
                                     "cliente_id" => $datos_cliente['cliente_id'],
                                     "cliente_tipo_documento" => $datos_cliente['cliente_tipo_documento'],
                                     "cliente_numero_documento" => $datos_cliente['cliente_numero_documento'],
@@ -250,7 +236,7 @@
                                     "cliente_email" => $campos['cliente_email'] // 👈 IMPORTANTE
                                 ];
                             } else {
-                                $_SESSION['datos_cliente_venta'] = [
+                                $_SESSION['datos_cliente_cotizacion'] = [
                                     "cliente_id" => 1,
                                     "cliente_tipo_documento" => "N/A",
                                     "cliente_numero_documento" => "N/A",
@@ -261,7 +247,7 @@
                         ?>
                             <div class="field has-addons mb-5">
                                 <div class="control">
-                                    <input class="input" type="text" readonly id="venta_cliente" value="<?php echo $_SESSION['datos_cliente_venta']['cliente_nombre'] . " " . $_SESSION['datos_cliente_venta']['cliente_apellido']; ?>">
+                                    <input class="input" type="text" readonly id="venta_cliente" value="<?php echo $_SESSION['datos_cliente_cotizacion']['cliente_nombre'] . " " . $_SESSION['datos_cliente_cotizacion']['cliente_apellido']; ?>">
                                 </div>
                                 <div class="control">
                                     <a class="button is-info js-modal-trigger" data-target="modal-js-client" title="Agregar cliente" id="btn_add_client">
@@ -271,32 +257,24 @@
                             </div>
                         <?php } ?>
 
-                        <div class="control mb-5">
-                            <label>Total pagado por cliente <?php echo CAMPO_OBLIGATORIO; ?></label>
-                            <input class="input" type="text" name="venta_abono" id="venta_abono" value="0.00" pattern="[0-9.]{1,25}" maxlength="25">
-                        </div>
 
-                        <div class="control mb-5">
-                            <label>Cambio devuelto a cliente</label>
-                            <input class="input" type="text" id="venta_cambio" value="0.00" readonly>
-                        </div>
 
                         <h4 class="subtitle is-5 has-text-centered has-text-weight-bold mb-5">
                             <small>
-                                TOTAL A PAGAR:
+                                TOTAL COTIZADO:
                                 <?php echo MONEDA_SIMBOLO . number_format($total, MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, MONEDA_SEPARADOR_MILLAR) . " " . MONEDA_NOMBRE; ?>
                             </small>
                         </h4>
 
-                        <?php if ($_SESSION['venta_total'] > 0) { ?>
+                        <?php if ($_SESSION['cotizacion_total'] > 0) { ?>
                             <p class="has-text-centered">
-                                <button type="submit" class="button is-info is-rounded"><i class="far fa-save"></i> &nbsp; Guardar venta</button>
+                                <button type="submit" class="button is-info is-rounded"><i class="far fa-save"></i> &nbsp; Guardar cotizacion</button>
                             </p>
                         <?php } ?>
                         <p class="has-text-centered pt-6">
                             <small>Los campos marcados con <?php echo CAMPO_OBLIGATORIO; ?> son obligatorios</small>
                         </p>
-                        <input type="hidden" value="<?php echo number_format($_SESSION['venta_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, ""); ?>" id="venta_total_hidden">
+                        <input type="hidden" value="<?php echo number_format($_SESSION['cotizacion_total'], MONEDA_DECIMALES, MONEDA_SEPARADOR_DECIMAL, ""); ?>" id="cotizacion_total_hidden">
                         </form>
             </div>
 
@@ -313,7 +291,7 @@
 
 <!-- Modal buscar producto -->
 <div class="modal" id="modal-js-product">
-    <div class="modal-background"></div>    
+    <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">
             <p class="modal-card-title is-uppercase"><i class="fas fa-search"></i> &nbsp; Buscar producto</p>
@@ -356,19 +334,18 @@
         </section>
     </div>
 </div>
-
 <script>
     /* Detectar cuando se envia el formulario para agregar producto */
-    let sale_form_barcode = document.querySelector("#sale-barcode-form");
-    sale_form_barcode.addEventListener('submit', function(event) {
+    let cotizacion_form_barcode = document.querySelector("#sale-barcode-form");
+    cotizacion_form_barcode.addEventListener('submit', function(event) {
         event.preventDefault();
         setTimeout('agregar_producto()', 100);
     });
 
 
-    /* Detectar cuando escanea un codigo en formulario para agregar producto */
-    let sale_input_barcode = document.querySelector("#sale-barcode-input");
-    sale_input_barcode.addEventListener('paste', function() {
+    /* Detectar cuando escanea un codigo en formulario */
+    let cotizacion_input_barcode = document.querySelector("#sale-barcode-input");
+    cotizacion_input_barcode.addEventListener('paste', function() {
         setTimeout('agregar_producto()', 100);
     });
 
@@ -376,15 +353,14 @@
     /* Agregar producto */
     function agregar_producto() {
         let codigo_producto = document.querySelector('#sale-barcode-input').value;
-
         codigo_producto = codigo_producto.trim();
 
         if (codigo_producto != "") {
             let datos = new FormData();
             datos.append("producto_codigo", codigo_producto);
-            datos.append("modulo_venta", "agregar_producto");
+            datos.append("modulo_cotizacion", "agregar_producto");
 
-            fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+            fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                     method: 'POST',
                     body: datos
                 })
@@ -404,26 +380,24 @@
     }
 
 
-    /*----------  Buscar codigo  ----------*/
+    /*----------  Buscar producto  ----------*/
     function buscar_codigo() {
         let input_codigo = document.querySelector('#input_codigo').value;
-
         input_codigo = input_codigo.trim();
 
         if (input_codigo != "") {
 
             let datos = new FormData();
             datos.append("buscar_codigo", input_codigo);
-            datos.append("modulo_venta", "buscar_codigo");
+            datos.append("modulo_cotizacion", "buscar_codigo");
 
-            fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+            fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                     method: 'POST',
                     body: datos
                 })
                 .then(respuesta => respuesta.text())
                 .then(respuesta => {
-                    let tabla_productos = document.querySelector('#tabla_productos');
-                    tabla_productos.innerHTML = respuesta;
+                    document.querySelector('#tabla_productos').innerHTML = respuesta;
                 });
 
         } else {
@@ -437,31 +411,26 @@
     }
 
 
-    /*----------  Agregar codigo  ----------*/
-    function agregar_codigo($codigo) {
-        document.querySelector('#sale-barcode-input').value = $codigo;
+    /* Agregar código desde modal */
+    function agregar_codigo(codigo) {
+        document.querySelector('#sale-barcode-input').value = codigo;
         setTimeout('agregar_producto()', 100);
     }
 
 
-    /* Actualizar cantidad y envio de producto */
+    /* Actualizar cantidad y envio */
     function actualizar_cantidad_y_envio(cantidadId, envioId, codigo) {
-        let cantidad = document.querySelector(cantidadId).value;
-        let envio = document.querySelector(envioId).value;
 
-        cantidad = cantidad.trim();
-        envio = envio.trim();
-        codigo = codigo.trim();
+        let cantidad = document.querySelector(cantidadId).value.trim();
+        let envio = document.querySelector(envioId).value.trim();
 
         if (cantidad > 0 && envio >= 0) {
 
             Swal.fire({
                 title: '¿Estás seguro?',
-                text: "Desea actualizar la cantidad y el costo de envío del producto",
+                text: "Desea actualizar la cantidad y el costo de envío",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí, actualizar',
                 cancelButtonText: 'No, cancelar'
             }).then((result) => {
@@ -471,9 +440,9 @@
                     datos.append("producto_codigo", codigo);
                     datos.append("producto_cantidad", cantidad);
                     datos.append("producto_envio", envio);
-                    datos.append("modulo_venta", "actualizar_producto");
+                    datos.append("modulo_cotizacion", "actualizar_producto");
 
-                    fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+                    fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                             method: 'POST',
                             body: datos
                         })
@@ -483,45 +452,42 @@
                         });
                 }
             });
+
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Ocurrió un error inesperado',
-                text: 'Debes introducir una cantidad mayor a 0 y un costo de envío válido',
+                text: 'Cantidad debe ser mayor a 0 y envío válido',
                 confirmButtonText: 'Aceptar'
             });
         }
     }
 
 
-
     /*----------  Buscar cliente  ----------*/
     function buscar_cliente() {
-        let input_cliente = document.querySelector('#input_cliente').value;
-
-        input_cliente = input_cliente.trim();
+        let input_cliente = document.querySelector('#input_cliente').value.trim();
 
         if (input_cliente != "") {
 
             let datos = new FormData();
             datos.append("buscar_cliente", input_cliente);
-            datos.append("modulo_venta", "buscar_cliente");
+            datos.append("modulo_cotizacion", "buscar_cliente");
 
-            fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+            fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                     method: 'POST',
                     body: datos
                 })
                 .then(respuesta => respuesta.text())
                 .then(respuesta => {
-                    let tabla_clientes = document.querySelector('#tabla_clientes');
-                    tabla_clientes.innerHTML = respuesta;
+                    document.querySelector('#tabla_clientes').innerHTML = respuesta;
                 });
 
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Ocurrió un error inesperado',
-                text: 'Debes de introducir el Numero de documento, Nombre, Apellido o Teléfono del cliente',
+                text: 'Debes ingresar datos del cliente',
                 confirmButtonText: 'Aceptar'
             });
         }
@@ -532,22 +498,20 @@
     function agregar_cliente(id) {
 
         Swal.fire({
-            title: '¿Quieres agregar este cliente?',
-            text: "Se va a agregar este cliente para realizar una venta",
+            title: '¿Agregar cliente?',
+            text: "Se asignará a la cotización",
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Si, agregar',
-            cancelButtonText: 'No, cancelar'
+            cancelButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
 
                 let datos = new FormData();
                 datos.append("cliente_id", id);
-                datos.append("modulo_venta", "agregar_cliente");
+                datos.append("modulo_cotizacion", "agregar_cliente");
 
-                fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+                fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                         method: 'POST',
                         body: datos
                     })
@@ -565,22 +529,20 @@
     function remover_cliente(id) {
 
         Swal.fire({
-            title: '¿Quieres remover este cliente?',
-            text: "Se va a quitar el cliente seleccionado de la venta",
+            title: '¿Remover cliente?',
+            text: "Se quitará de la cotización",
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Si, remover',
-            cancelButtonText: 'No, cancelar'
+            cancelButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
 
                 let datos = new FormData();
                 datos.append("cliente_id", id);
-                datos.append("modulo_venta", "remover_cliente");
+                datos.append("modulo_cotizacion", "remover_cliente");
 
-                fetch('<?php echo APP_URL; ?>app/ajax/ventaAjax.php', {
+                fetch('<?php echo APP_URL; ?>app/ajax/cotizacionAjax.php', {
                         method: 'POST',
                         body: datos
                     })
@@ -593,27 +555,24 @@
         });
     }
 
-    /*----------  Calcular cambio  ----------*/
-    let venta_abono_input = document.querySelector("#venta_abono");
-    venta_abono_input.addEventListener('keyup', function(e) {
-        e.preventDefault();
 
-        let abono = document.querySelector('#venta_abono').value;
-        abono = abono.trim();
-        abono = parseFloat(abono);
+    /*----------  Calcular total (opcional tipo venta) ----------*/
+    let cotizacion_abono_input = document.querySelector("#venta_abono");
 
-        let total = document.querySelector('#venta_total_hidden').value;
-        total = total.trim();
-        total = parseFloat(total);
+    if (cotizacion_abono_input) {
+        cotizacion_abono_input.addEventListener('keyup', function(e) {
 
-        if (abono >= total) {
-            cambio = abono - total;
-            cambio = parseFloat(cambio).toFixed(<?php echo MONEDA_DECIMALES; ?>);
-            document.querySelector('#venta_cambio').value = cambio;
-        } else {
-            document.querySelector('#venta_cambio').value = "0.00";
-        }
-    });
+            let abono = parseFloat(document.querySelector('#venta_abono').value) || 0;
+            let total = parseFloat(document.querySelector('#venta_total_hidden').value) || 0;
+
+            if (abono >= total) {
+                let cambio = (abono - total).toFixed(<?php echo MONEDA_DECIMALES; ?>);
+                document.querySelector('#venta_cambio').value = cambio;
+            } else {
+                document.querySelector('#venta_cambio').value = "0.00";
+            }
+        });
+    }
 </script>
 
 <?php
