@@ -7,9 +7,7 @@
     <?php
     $check_empresa = $insLogin->seleccionarDatos("Normal", "empresa LIMIT 1", "*", 0);
 
-    $total = isset($_SESSION['venta_total']) ? $_SESSION['venta_total'] : 0; // ya incluye IVA
-    $subtotal = $total / 1.13;
-    $iva = $total - $subtotal;
+    $total = 0;
 
 
     if ($check_empresa->rowCount() == 1) {
@@ -142,6 +140,9 @@
                                     $cc++;
                                     $_SESSION['venta_total'] += $productos['venta_detalle_total'];
                                 }
+                                $total = isset($_SESSION['venta_total']) ? $_SESSION['venta_total'] : 0; // ya incluye IVA
+                                $subtotal = $total / 1.13;
+                                $iva = $total - $subtotal;
                                 ?>
 
 

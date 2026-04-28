@@ -523,7 +523,7 @@ class saleController extends mainModel
 	}
 
 
-	/*---------- Controlador registrar venta ----------*/
+		/*---------- Controlador registrar venta ----------*/
 	public function registrarVentaControlador()
 	{
 
@@ -602,26 +602,14 @@ class saleController extends mainModel
 
 		/*== Formateando variables ==*/
 		$venta_pagado = number_format($venta_pagado, MONEDA_DECIMALES, '.', '');
-
+		$venta_total = number_format($_SESSION['venta_total'], MONEDA_DECIMALES, '.', '');
 
 		$venta_fecha = date("Y-m-d");
 		$venta_hora = date("h:i a");
 
-
-		/*== Total ya incluye IVA ==*/
-		$venta_total = floatval($_SESSION['venta_total']);
-
-		/*== Desglose ==*/
-		$venta_subtotal = $venta_total / 1.13;
-		$venta_iva = $venta_total - $venta_subtotal;
-
-		/*== Total final (NO cambia) ==*/
 		$venta_total_final = $venta_total;
-
-		/*== Formateando ==*/
-		$venta_subtotal = number_format($venta_subtotal, MONEDA_DECIMALES, '.', '');
-		$venta_iva = number_format($venta_iva, MONEDA_DECIMALES, '.', '');
 		$venta_total_final = number_format($venta_total_final, MONEDA_DECIMALES, '.', '');
+
 
 		/*== Calculando el cambio ==*/
 		if ($venta_pagado < $venta_total_final) {
@@ -946,27 +934,12 @@ class saleController extends mainModel
 			exit();
 		}
 
-		$_SESSION['venta_codigo_factura'] = $codigo_venta;
-
-		$correo_cliente = $_SESSION['datos_cliente_venta']['cliente_email'];
-		$nombre_cliente = $_SESSION['datos_cliente_venta']['cliente_nombre'];
-
-
 		/*== Vaciando variables de sesion ==*/
 		unset($_SESSION['venta_total']);
 		unset($_SESSION['datos_cliente_venta']);
 		unset($_SESSION['datos_producto_venta']);
 
-		
-
-		// Validar que tenga correo
-		if ($_SESSION['datos_cliente_venta']['cliente_id'] != 1 && !empty($correo_cliente)) {
-			try {
-				//$this->enviarFacturaCorreo($correo_cliente, $nombre_cliente, $codigo_venta);
-			} catch (Exception $e) {
-				error_log("Error al enviar correo: " . $e->getMessage());
-			}
-		}
+		$_SESSION['venta_codigo_factura'] = $codigo_venta;
 
 		$alerta = [
 			"tipo" => "recargar",

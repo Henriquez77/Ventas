@@ -61,7 +61,7 @@
 				<div class="column">
 					<div class="control">
 						<label>Costo de compra <?php echo CAMPO_OBLIGATORIO; ?></label>
-						<input class="input" type="text" name="producto_costo_compra" value="<?php echo $datos['producto_costo_compra']; ?>" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required>
+						<input class="input" type="text" id="compra" name="producto_costo_compra" value="<?php echo $datos['producto_costo_compra']; ?>" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required>
 					</div>
 				</div>
 				<div class="column">
@@ -87,7 +87,7 @@
 				<div class="column">
 					<div class="control">
 						<label>Costo C/U <?php echo CAMPO_OBLIGATORIO; ?></label>
-						<input class="input" type="number" step="0.01" id="costo_unitario" value="<?php echo $datos['producto_costo_unidad']; ?>" name="producto_costo_unidad" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required readonly>
+						<input class="input" type="number" step="0.01" name="producto_costo_unidad" id="costo_unitario" value="<?php echo $datos['producto_costo_unidad']; ?>" pattern="[0-9.]{1,25}" maxlength="25" value="0.00" required readonly>
 					</div>
 				</div>
 				<div class="column">
