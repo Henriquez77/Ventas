@@ -120,6 +120,13 @@ if ($datos_venta->rowCount() == 1) {
 		$pdf->Cell(6, 7, iconv("UTF-8", "ISO-8859-1", 'Dir:'), 0, 0);
 		$pdf->SetTextColor(97, 97, 97);
 		$pdf->Cell(109, 7, iconv("UTF-8", "ISO-8859-1", $datos_venta['cliente_provincia'] . ", " . $datos_venta['cliente_ciudad'] . ", " . $datos_venta['cliente_direccion']), 0, 0);
+
+		$pdf->Ln(7);
+
+		$pdf->SetTextColor(39, 39, 51);
+		$pdf->Cell(6, 7, iconv("UTF-8", "ISO-8859-1", 'Dir:'), 0, 0);
+		$pdf->SetTextColor(97, 97, 97);
+		$pdf->Cell(109, 7, iconv("UTF-8", "ISO-8859-1", $datos_venta['cliente_email']) , 0, 0);
 	}
 
 	$pdf->Ln(9);

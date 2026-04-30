@@ -247,7 +247,7 @@
                                     "cliente_numero_documento" => $datos_cliente['cliente_numero_documento'],
                                     "cliente_nombre" => $datos_cliente['cliente_nombre'],
                                     "cliente_apellido" => $datos_cliente['cliente_apellido'],
-                                    "cliente_email" => $campos['cliente_email'] // 👈 IMPORTANTE
+                                    "cliente_email" => $datos_cliente['cliente_email'] // 👈 IMPORTANTE
                                 ];
                             } else {
                                 $_SESSION['datos_cliente_venta'] = [
