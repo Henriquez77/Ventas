@@ -60,16 +60,16 @@
                         <br>
                         <div class="container">
                             <div class="columns">
-                                <div class="column has-text-centered">
+                                <!-- <div class="column has-text-centered">
                                     <button type="button" class="button is-link is-light" onclick="print_ticket('<?php echo APP_URL . "app/pdf/ticket.php?code=" . $_SESSION['cotizacion_codigo']; ?>')">
                                         <i class="fas fa-receipt fa-2x"></i> &nbsp;
                                         Imprimir ticket de venta
                                     </button>
-                                </div>
+                                </div> -->
                                 <div class="column has-text-centered">
-                                    <button type="button" class="button is-link is-light" onclick="print_invoice('<?php echo APP_URL . "app/pdf/invoice.php?code=" . $_SESSION['cotizacion_codigo']; ?>')">
+                                    <button type="button" class="button is-link is-light" onclick="print_invoice('<?php echo APP_URL . "app/pdf/cotizacion.php?code=" . $_SESSION['cotizacion_codigo']; ?>')">
                                         <i class="fas fa-file-invoice-dollar fa-2x"></i> &nbsp;
-                                        Imprimir factura de venta
+                                        Imprimir cotizacion
                                     </button>
                                 </div>
                             </div>
